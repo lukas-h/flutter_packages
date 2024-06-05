@@ -86,6 +86,9 @@ abstract class MarkdownBuilderDelegate {
   /// text, `href` attribute, and title.
   GestureRecognizer createLink(String text, String? href, String title);
 
+  /// Returns a gesture recognizer to use for an `internalLink` element
+  GestureRecognizer createInternalLink(String text);
+
   /// Returns formatted text to use to display the given contents of a `pre`
   /// element.
   ///
@@ -268,6 +271,14 @@ class MarkdownBuilder implements md.NodeVisitor {
 
         _linkHandlers.add(
           delegate.createLink(text, destination, title),
+        );
+      } else if (tag == 'internalLink') {
+        final String? text = extractTextFromElement(element);
+        if (text == null) {
+          return false;
+        }
+        _linkHandlers.add(
+          delegate.createInternalLink(text),
         );
       }
 

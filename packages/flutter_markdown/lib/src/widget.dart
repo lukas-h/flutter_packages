@@ -215,6 +215,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     this.syntaxHighlighter,
     this.onSelectionChanged,
     this.onTapLink,
+    this.onTapInternalLink,
     this.onTapText,
     this.imageDirectory,
     this.blockSyntaxes,
@@ -256,6 +257,8 @@ abstract class MarkdownWidget extends StatefulWidget {
 
   /// Called when the user taps a link.
   final MarkdownTapLinkCallback? onTapLink;
+
+  final ValueChanged<String>? onTapInternalLink;
 
   /// Called when the user changes selection when [selectable] is set to true.
   final MarkdownOnSelectionChangedCallback? onSelectionChanged;
@@ -440,6 +443,18 @@ class _MarkdownWidgetState extends State<MarkdownWidget>
 
   @override
   Widget build(BuildContext context) => widget.build(context, _children);
+
+  @override
+  GestureRecognizer createInternalLink(String text) {
+    final TapGestureRecognizer recognizer = TapGestureRecognizer()
+      ..onTap = () {
+        if (widget.onTapInternalLink != null) {
+          widget.onTapInternalLink!(text);
+        }
+      };
+    _recognizers.add(recognizer);
+    return recognizer;
+  }
 }
 
 /// A non-scrolling widget that parses and displays Markdown.
@@ -462,6 +477,7 @@ class MarkdownBody extends MarkdownWidget {
     super.syntaxHighlighter,
     super.onSelectionChanged,
     super.onTapLink,
+    super.onTapInternalLink,
     super.onTapText,
     super.imageDirectory,
     super.blockSyntaxes,
@@ -517,6 +533,7 @@ class Markdown extends MarkdownWidget {
     super.syntaxHighlighter,
     super.onSelectionChanged,
     super.onTapLink,
+    super.onTapInternalLink,
     super.onTapText,
     super.imageDirectory,
     super.blockSyntaxes,

@@ -74,6 +74,7 @@ class MarkdownStyleSheet {
                 : TextScaler.linear(textScaleFactor)),
         _styles = <String, TextStyle?>{
           'a': a,
+          'internalLink': a,
           'p': p,
           'li': p,
           'code': code,
